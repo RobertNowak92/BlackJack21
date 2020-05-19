@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+Your money: {{player.money}}
+<form action="game" method="post">
+    {% csrf_token %}
+    Place bet : <input type="text" name="player_bet"><br>
+    <input type="submit" value="Deal the cards"/><br>
+    </form>
+
+{% endblock %}

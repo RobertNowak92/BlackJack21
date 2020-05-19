@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for item in total %}
+        {% if item.name == 'Croupier' and item.stand == False%}
+            {{ item.participant_hand.0 }}
+            blank
+        {% else %}
+            {% for card in item.participant_hand %}
+                {{ card }}
+            {% endfor %}
+        {% endif %}
+
+        <br>
+        {{ item.hand_value }} <br>
+        {{ item.name }} <br>
+
+    {% endfor %}
+
+Your money: {{player.money}}
+
+    {% if player.hand_value < croupier.hand_value and croupier.hand_value <= 21 and croupier.stand == True or player.hand_value > 21 %}
+    <form action="lost_round" method="post">
+        {% csrf_token %}
+        <input type="submit" value="YOU LOSE"/><br>
+    </form>
+
+    {% elif player.hand_value == 21 %}
+    <form action="blackjack" method="post">
+        {% csrf_token %}
+        <input type="submit" value="BLACKJACK"/><br>
+    </form>
+
+    {% elif player.hand_value > croupier.hand_value and croupier.stand == True or croupier.hand_value > 21 %}
+    <form action="won_round" method="post">
+        {% csrf_token %}
+        <input type="submit" value="YOU WIN"/><br>
+    </form>
+
+    {% elif player.hand_value == croupier.hand_value and croupier.stand == True %}
+    <form action="place_bet" method="post">
+        {% csrf_token %}
+        <input type="submit" value="TIE"/><br>
+    </form>
+
+    {% else %}
+    <form action="player_hit" method="post">
+        {% csrf_token %}
+        <input type="submit" value="HIT"/><br>
+
+    </form>
+     <form action="stand" method="post">
+        {% csrf_token %}
+        <input type="submit" value="STAND"/><br>
+
+    </form>
+    {% endif %}
+{% endblock %}

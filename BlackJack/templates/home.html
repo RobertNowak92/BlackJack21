@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>BlackJack21</h1>
+
+<form action="place_bet" method="post">
+    {% csrf_token %}
+
+    <label for="num_players_list">Number of players</label>
+    <select id="num_players_list" name="num_players_list">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
+    <input type="submit" value="Start game"/><br>
+    </form>
+
+{% endblock %}
