@@ -19,6 +19,7 @@
     {% endfor %}
 
 Your money: {{player.money}}
+Bet: {{player.bet}}
 
     {% if player.hand_value < croupier.hand_value and croupier.hand_value <= 21 and croupier.stand == True or player.hand_value > 21 %}
     <form action="lost_round" method="post">
@@ -26,7 +27,7 @@ Your money: {{player.money}}
         <input type="submit" value="YOU LOSE"/><br>
     </form>
 
-    {% elif player.hand_value == 21 %}
+    {% elif player.hand_value == 21 and player.participant_hand|length == 2 %}
     <form action="blackjack" method="post">
         {% csrf_token %}
         <input type="submit" value="BLACKJACK"/><br>
@@ -55,5 +56,12 @@ Your money: {{player.money}}
         <input type="submit" value="STAND"/><br>
 
     </form>
+    {% if player.participant_hand|length == 2 %}
+    <form action="double" method="post">
+        {% csrf_token %}
+        <input type="submit" value="DOUBLE"/><br>
+
+    </form>
+    {% endif %}
     {% endif %}
 {% endblock %}

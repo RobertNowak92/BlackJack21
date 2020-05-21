@@ -11,4 +11,5 @@ urlpatterns = [
     path('lost_round', views.lost_round, name='lost_round'),
     path('won_round', views.won_round, name='won_round'),
     path('blackjack', views.blackjack, name='blackjack'),
+    path('double', views.double, name='double'),
 ]

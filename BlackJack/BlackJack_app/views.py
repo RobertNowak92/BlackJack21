@@ -83,6 +83,31 @@ def stand(request):
                   'croupier': croupier})
 
 
+def double(request):
+
+    croupier = Participants.objects.get(pk=1)
+    player = Participants.objects.get(pk=2)
+    sh_deck = request.session.get('sh_deck')
+
+    player.bet *= 2
+    player.participant_hand.append(sh_deck[0])
+    del sh_deck[0]
+    player.hand_value = count_cards_value(player.participant_hand[-1:], player.hand_value)
+    player.save()
+    if player.hand_value <= 21:
+        croupier.hand_value = count_cards_value(croupier.participant_hand[-1:], croupier.hand_value)
+        while croupier.hand_value <= 16:
+            croupier.participant_hand.append(sh_deck[0])
+            del sh_deck[0]
+            croupier.hand_value = count_cards_value(croupier.participant_hand[-1:], croupier.hand_value)
+        croupier.stand = True
+        croupier.save()
+    request.session['sh_deck'] = sh_deck
+    participant = Participants.objects.all()
+    return render(request, 'game.html', {'total': participant, 'player': player,
+                  'croupier': croupier})
+
+
 def lost_round(request):
     player = Participants.objects.get(pk=2)
     player.money -= player.bet
